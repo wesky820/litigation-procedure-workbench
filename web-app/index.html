@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="中国人民法院立案审查与全流程诉讼程序实务工作台：涵盖六大诉讼领域 2,300 项实务问答、法定诉讼费速算器与交互式诉状起草下载工具。" />
+  <title>诉讼立案与程序实务工作台 · 2300项程序检索 · 算费与诉状生成</title>
+  <link rel="icon" type="image/png" href="./assets/favicon.png" />
+  <link rel="apple-touch-icon" href="./assets/icon-512.jpg" />
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+<body>
+  <div class="app-layout no-print">
+    <!-- 顶部全局导航栏 -->
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a href="./" id="brandHomeLink" class="brand">
+          <img src="./assets/favicon.png" alt="Logo" class="brand-logo" width="34" height="34" />
+          <div class="brand-text">
+            <span class="brand-name">诉讼立案与程序工作台</span>
+            <span class="brand-tag">2,300 项实务问答 · 算费 · 诉状起草</span>
+          </div>
+        </a>
+
+        <!-- 全局快捷搜索框 -->
+        <div class="global-search" id="globalSearchBox">
+          <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          <input id="searchInput" type="search" placeholder="搜索管辖、诉前保全、撤诉退费、劳动仲裁、题号… " autocomplete="off" />
+          <button id="clearSearchBtn" type="button" class="icon-clear hidden" title="清空搜索">&times;</button>
+          <kbd class="kbd-hint" id="kbdHint">⌘K</kbd>
+        </div>
+
+        <!-- 主导航标签 -->
+        <nav class="primary-nav" aria-label="主功能切换">
+          <button type="button" class="nav-tab active" data-tab="qa">程序问答库</button>
+          <button type="button" class="nav-tab" data-tab="draft">诉状起草下载</button>
+          <button type="button" class="nav-tab" data-tab="calc">诉讼费计算</button>
+          <button type="button" class="nav-tab" data-tab="guide">立案自查总纲</button>
+        </nav>
+
+        <div class="topbar-tools">
+          <button id="favFilterQuickBtn" type="button" class="tool-btn" title="查看我的收藏">
+            <span>★ 收藏</span>
+            <span id="topFavCount" class="badge-count">0</span>
+          </button>
+          <button id="themeToggleBtn" type="button" class="tool-btn icon-only" title="切换深色/浅色模式" aria-label="切换主题">
+            <span id="themeIcon">🌙</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- 主体内容容器 -->
+    <main class="workspace-main">
+      <!-- ==================== TAB 1: 程序问答库（双栏工作台） ==================== -->
+      <section id="tab-qa" class="view-section active">
+        <div class="qa-workbench">
+          <!-- 左栏：筛选与列表 -->
+          <div class="qa-list-pane">
+            <div class="filter-panel">
+              <!-- 六大领域 -->
+              <div id="partPills" class="part-pills">
+                <button type="button" class="part-pill active" data-part="-1">全部 (2300)</button>
+                <button type="button" class="part-pill" data-part="0">民事诉讼</button>
+                <button type="button" class="part-pill" data-part="1">商事诉讼</button>
+                <button type="button" class="part-pill" data-part="2">刑事诉讼</button>
+                <button type="button" class="part-pill" data-part="3">国家赔偿</button>
+                <button type="button" class="part-pill" data-part="4">行政诉讼</button>
+                <button type="button" class="part-pill" data-part="5">知产与垄断</button>
+              </div>
+
+              <!-- 章节 + 快捷筛选开关 -->
+              <div class="secondary-filters">
+                <select id="chapterSelect" class="select-control" aria-label="章节筛选">
+                  <option value="-1">全部章节（59章）</option>
+                </select>
+                <button id="shOnlyBtn" type="button" class="chip-toggle">上海实务参考</button>
+                <button id="favOnlyBtn" type="button" class="chip-toggle">仅看收藏</button>
+              </div>
+
+              <!-- 高频检索热词 -->
+              <div id="hotQueriesBar" class="hot-queries">
+                <span class="hot-label">热搜：</span>
+                <button type="button" class="hot-chip" data-q="级别管辖">级别管辖</button>
+                <button type="button" class="hot-chip" data-q="诉前保全 担保">诉前保全担保</button>
+                <button type="button" class="hot-chip" data-q="撤诉 减半">撤诉退费</button>
+                <button type="button" class="hot-chip" data-q="电子送达">电子送达</button>
+                <button type="button" class="hot-chip" data-q="劳动争议 仲裁">劳动仲裁前置</button>
+                <button type="button" class="hot-chip" data-q="小额诉讼 上诉">小额一审终审</button>
+                <button type="button" class="hot-chip" data-q="失信 限制高消费">限高与失信</button>
+                <button type="button" class="hot-chip" data-q="必须经过行政复议">行政复议前置</button>
+              </div>
+            </div>
+
+            <div class="list-status-bar">
+              <span id="qaResultStat">正在加载目录…</span>
+              <span id="chunkLoadBadge" class="status-pill">正在同步全文索引…</span>
+            </div>
+
+            <div id="qaCardsList" class="qa-cards-scroll"></div>
+
+            <div class="pagination-bar">
+              <button id="loadMoreQaBtn" type="button" class="btn btn-outline btn-block hidden">加载更多条目</button>
+            </div>
+          </div>
+
+          <!-- 右栏：桌面端固定阅读面板 / 移动端抽屉 -->
+          <aside id="qaDetailPane" class="qa-detail-pane" aria-label="问答详情">
+            <div class="detail-pane-inner">
+              <div class="detail-toolbar">
+                <button id="mobileCloseDetailBtn" type="button" class="btn btn-ghost mobile-only">&larr; 返回列表</button>
+                <div class="detail-actions">
+                  <button id="btnFavQa" type="button" class="btn btn-sm btn-ghost">☆ 收藏</button>
+                  <button id="btnShareLinkQa" type="button" class="btn btn-sm btn-outline" title="复制带 ?q= 参数的专属直达链接">🔗 直达链接</button>
+                  <button id="btnCopyFullQa" type="button" class="btn btn-sm btn-outline">📋 复制全文</button>
+                  <button id="btnCopyLawQa" type="button" class="btn btn-sm btn-ghost">⚖️ 复制法条</button>
+                  <button id="btnExportImgQa" type="button" class="btn btn-sm btn-primary">🖼️ 导出高清长图</button>
+                </div>
+              </div>
+
+              <article id="detailArticle" class="detail-article">
+                <div class="empty-reader">
+                  <p>选择左侧任意诉讼程序问题查看完整解答、特别提示与现行法条依据。</p>
+                </div>
+              </article>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ==================== TAB 2: 交互式诉状起草与下载 ==================== -->
+      <section id="tab-draft" class="view-section">
+        <div class="section-header-bar">
+          <div>
+            <h1 class="page-h1">交互式诉讼文书起草与下载</h1>
+            <p class="page-sub">涵盖民事、刑事自诉、行政起诉/上诉及强制执行 8 类官方标准文书样式，实时排版预览，一键导出国标公文格式 Word / Markdown / TXT 或打印 PDF</p>
+          </div>
+          <div class="header-btn-group">
+            <button id="btnShareDraftLink" type="button" class="btn btn-outline">🔗 复制当前模板直达链接</button>
+            <button id="btnFillDemoDraft" type="button" class="btn btn-ghost">✨ 填入示例数据</button>
+            <button id="btnResetDraft" type="button" class="btn btn-ghost">🗑️ 清空重填</button>
+          </div>
+        </div>
+
+        <!-- 8大文书选择器 -->
+        <div id="docTypeSelector" class="doc-type-tabs"></div>
+
+        <div class="drafter-grid">
+          <!-- 左栏：结构化填空表单 -->
+          <div class="drafter-form-card">
+            <div id="drafterLawTip" class="law-callout"></div>
+            <form id="drafterForm" class="drafter-form" novalidate></form>
+          </div>
+
+          <!-- 右栏：实时 A4 纸张仿真预览 + 多格式下载栏 -->
+          <div class="drafter-preview-col">
+            <div class="export-toolbar">
+              <span class="export-label">导出与分享：</span>
+              <button id="btnDownloadDoc" type="button" class="btn btn-sm btn-primary">📄 下载 Word (.doc)</button>
+              <button id="btnDownloadMd" type="button" class="btn btn-sm btn-outline">📝 下载 Markdown (.md)</button>
+              <button id="btnDownloadTxt" type="button" class="btn btn-sm btn-outline">📃 下载纯文本 (.txt)</button>
+              <button id="btnCopyDraftText" type="button" class="btn btn-sm btn-outline">📋 复制全文</button>
+              <button id="btnPrintDraft" type="button" class="btn btn-sm btn-ghost">🖨️ 打印 / 存为 PDF</button>
+            </div>
+
+            <div class="a4-paper-wrap">
+              <div id="a4PreviewPaper" class="a4-paper"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== TAB 3: 法定诉讼费用计算器 ==================== -->
+      <section id="tab-calc" class="view-section">
+        <div class="calc-layout">
+          <div class="panel-card calc-main-card">
+            <div class="card-title-row">
+              <div>
+                <h1 class="page-h1">法定诉讼费 / 保全费 / 执行费速算器</h1>
+                <p class="page-sub">严格依据《诉讼费用交纳办法》第13–16条分段累计标准（整数分运算，零浮点误差）</p>
+              </div>
+              <div class="header-btn-group">
+                <button id="btnShareCalcLink" type="button" class="btn btn-sm btn-outline">🔗 复制当前算费链接</button>
+                <button id="btnCopyCalcReport" type="button" class="btn btn-sm btn-outline">📋 复制算费明细</button>
+                <button id="btnExportCalcImg" type="button" class="btn btn-sm btn-primary">🖼️ 下载高清预算图</button>
+              </div>
+            </div>
+
+            <div class="calc-controls">
+              <div class="amount-input-wrap">
+                <span class="yen-sign">&yen;</span>
+                <input id="calcAmountInput" type="number" step="any" min="0" value="350" aria-label="争议标的额" />
+                <div class="unit-segmented">
+                  <button type="button" class="seg-btn active" data-unit="10000">万元</button>
+                  <button type="button" class="seg-btn" data-unit="1">元</button>
+                </div>
+              </div>
+              <div class="quick-amounts">
+                <span>快捷标的额：</span>
+                <button type="button" class="amt-chip" data-val="5" data-unit="10000">5万</button>
+                <button type="button" class="amt-chip" data-val="20" data-unit="10000">20万</button>
+                <button type="button" class="amt-chip" data-val="50" data-unit="10000">50万</button>
+                <button type="button" class="amt-chip" data-val="100" data-unit="10000">100万</button>
+                <button type="button" class="amt-chip" data-val="350" data-unit="10000">350万</button>
+                <button type="button" class="amt-chip" data-val="1000" data-unit="10000">1000万</button>
+                <button type="button" class="amt-chip" data-val="5000" data-unit="10000">5000万</button>
+              </div>
+            </div>
+
+            <div id="calcMetricsGrid" class="calc-metrics-grid"></div>
+          </div>
+
+          <div class="panel-card">
+            <h2 class="card-h2">非财产及定额收费案件速查表</h2>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>案件 / 程序类型</th>
+                    <th>法定交纳标准</th>
+                    <th>实务要点与减免提示</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>离婚案件</strong></td>
+                    <td>每件 50 元至 300 元</td>
+                    <td>涉及财产分割总额不超过 20 万元不另交；超过 20 万元的部分按 <strong>0.5%</strong> 交纳</td>
+                  </tr>
+                  <tr>
+                    <td><strong>侵害姓名权、名称权、肖像权、名誉权、荣誉权及其他人格权</strong></td>
+                    <td>每件 100 元至 500 元</td>
+                    <td>涉及损害赔偿金额 ≤5 万元不另交；5万–10万元部分按 <strong>1%</strong>，超 10 万元部分按 <strong>0.5%</strong></td>
+                  </tr>
+                  <tr>
+                    <td><strong>知识产权民事案件</strong></td>
+                    <td>每件 500 元至 1,000 元</td>
+                    <td>有争议金额或价额的按财产案件标准交纳；上海无争议金额知产民事案件每件 <strong>800 元</strong></td>
+                  </tr>
+                  <tr>
+                    <td><strong>劳动争议案件</strong></td>
+                    <td>每件 10 元</td>
+                    <td>追索劳动报酬案件可不预交案件受理费</td>
+                  </tr>
+                  <tr>
+                    <td><strong>行政诉讼案件</strong></td>
+                    <td>商标/专利/海事行政每件 100 元；其他每件 50 元</td>
+                    <td>行政赔偿案件<strong>不交纳</strong>案件受理费</td>
+                  </tr>
+                  <tr>
+                    <td><strong>申请撤销仲裁裁决 / 认定仲裁协议效力</strong></td>
+                    <td>每件 400 元</td>
+                    <td>由仲裁委员会所在地中级人民法院（或专门法院）管辖</td>
+                  </tr>
+                  <tr>
+                    <td><strong>公示催告程序</strong></td>
+                    <td>每件 100 元</td>
+                    <td>票据丧失请求除权判决适用</td>
+                  </tr>
+                  <tr>
+                    <td><strong>法定免交受理费情形</strong></td>
+                    <td>0 元</td>
+                    <td>特别程序、国家赔偿、检察公益诉讼、人身安全保护令、不予受理/驳回起诉/管辖异议裁定及对其提起的上诉</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== TAB 4: 立案自查与全流程总纲 ==================== -->
+      <section id="tab-guide" class="view-section">
+        <div class="guide-grid">
+          <div class="panel-card">
+            <div class="card-title-row">
+              <div>
+                <h1 class="page-h1">起诉前 5 步合规自查清单</h1>
+                <p class="page-sub">勾选核验《民事诉讼法》第122条法定起诉要件与前置程序拦截项</p>
+              </div>
+              <span id="guideCheckScore" class="status-pill">已完成 0 / 5</span>
+            </div>
+
+            <div id="guideChecklist" class="guide-checklist">
+              <label class="guide-check-row">
+                <input type="checkbox" data-idx="0" />
+                <div>
+                  <strong>1. 原告主体适格（与本案有直接利害关系）</strong>
+                  <p>自然人附身份证复印件；法人或非法人组织附营业执照副本、法定代表人/主要负责人身份证明书。分支机构须确认是否依法设立并领取营业执照。</p>
+                </div>
+              </label>
+              <label class="guide-check-row">
+                <input type="checkbox" data-idx="1" />
+                <div>
+                  <strong>2. 有明确的被告及有效送达地址线索</strong>
+                  <p>记明被告姓名/名称、住所、联系方式等信息（注意：刑事自诉案件被告人下落不明的法院不予受理；民事被告下落不明仍可受理并依法公告送达）。</p>
+                </div>
+              </label>
+              <label class="guide-check-row">
+                <input type="checkbox" data-idx="2" />
+                <div>
+                  <strong>3. 诉讼请求具体明确 + 事实理由与初步证据齐全</strong>
+                  <p>给付金额、利息/违约金计算基数、利率及起止日期应具体明确。特别提醒：<strong>超过诉讼时效不得作为立案阶段不予受理的理由</strong>，法院应当立案受理。</p>
+                </div>
+              </label>
+              <label class="guide-check-row">
+                <input type="checkbox" data-idx="3" />
+                <div>
+                  <strong>4. 已排查有效仲裁条款及法定前置程序</strong>
+                  <p>合同无有效书面仲裁协议（反垄断民事纠纷除外）；劳动争议已完成仲裁前置（持工资欠条直诉除外）；当场处罚、行政不作为、政府信息不予公开等已完成行政复议前置。</p>
+                </div>
+              </label>
+              <label class="guide-check-row">
+                <input type="checkbox" data-idx="4" />
+                <div>
+                  <strong>5. 属于人民法院受案范围且受诉法院具有地域与级别管辖权</strong>
+                  <p>核查是否涉及不动产、港口作业、继承等专属管辖，协议管辖条款是否具备实际联系且未违反级别/专属管辖，以及标的额是否达到中院（如5亿/1亿，涉外4000万/2000万）标准。</p>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="panel-card">
+            <h2 class="card-h2">全类型案件立案审查期限与救济总表（点击题号直达详解）</h2>
+            <div id="guideDeadlinesGrid" class="deadlines-grid"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="app-footer">
+      <span>诉讼立案与程序实务工作台 · 依据现行有效法律法规与最高人民法院司法解释整理 · 仅供实务参考，具体以受诉人民法院审查口径为准</span>
+    </footer>
+  </div>
+
+  <!-- 专供浏览器打印 / 导出 PDF 的纯净 A4 公文节点 -->
+  <div id="printOnlyDoc" class="print-only-doc"></div>
+
+  <!-- 全局轻量通知 Toast -->
+  <div id="webToast" class="web-toast hidden" role="status" aria-live="polite"></div>
+
+  <script src="./data/catalog.js"></script>
+  <script src="./assets/drafter.js"></script>
+  <script src="./assets/app.js"></script>
+</body>
+</html>

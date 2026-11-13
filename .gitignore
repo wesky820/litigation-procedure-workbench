@@ -1,0 +1,21 @@
+# 严格排除本地原始大文件与临时产物
+*.pdf
+*.PDF
+minitool/
+
+# 系统与编辑器文件
+.DS_Store
+**/.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Python / Node 缓存与依赖
+__pycache__/
+**/__pycache__/
+*.py[cod]
+node_modules/
+dist/
+*.log
+.env
+.env.*

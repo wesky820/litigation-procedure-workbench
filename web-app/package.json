@@ -1,0 +1,20 @@
+{
+  "name": "litigation-procedure-workbench",
+  "version": "1.0.0",
+  "description": "中国人民法院立案审查与全流程诉讼程序实务动态工作台（2,300项问答检索 · 整数分算费器 · 交互式诉状起草与 Word/MD/TXT/PDF 导出）",
+  "private": false,
+  "license": "MIT",
+  "scripts": {
+    "dev": "python3 -m http.server 8080",
+    "serve": "npx --yes serve -l 8080 .",
+    "sync-data": "python3 scripts/sync_data.py"
+  },
+  "keywords": [
+    "legal-tech",
+    "chinese-law",
+    "litigation-procedure",
+    "case-filing",
+    "document-drafter",
+    "court-fee-calculator"
+  ]
+}
